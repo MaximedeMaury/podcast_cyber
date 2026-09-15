@@ -1,33 +1,44 @@
-from fastapi import FastAPI, UploadFile, File, Form
-from fastapi.responses import HTMLResponse
-from fastapi.staticfiles import StaticFiles
 import os
+from fastapi import FastAPI, File, UploadFile, HTTPException, Depends
+from fastapi.security import APIKeyHeader
+from supabase import create_client, Client
 
 app = FastAPI()
 
-# Création du dossier pour stocker les podcasts
-os.makedirs("public/audio", exist_ok=True)
-# On rend le dossier accessible sur le web
-app.mount("/audio", StaticFiles(directory="public/audio"), name="audio")
+# 1. Récupération des clés Supabase et du mot de passe du site
+SUPABASE_URL = os.getenv("SUPABASE_URL")
+SUPABASE_KEY = os.getenv("SUPABASE_KEY")
+API_KEY = os.getenv("SITE_API_KEY")
 
+# Connexion à Supabase
+if SUPABASE_URL and SUPABASE_KEY:
+    supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
 
+# 2. Système de sécurité (Vérification de la clé)
+header_scheme = APIKeyHeader(name="X-API-Key")
+
+def verify_api_key(api_key: str = Depends(header_scheme)):
+    if API_KEY and api_key != API_KEY:
+        raise HTTPException(status_code=401, detail="Clé API invalide")
+    return api_key
+
+# 3. La route qui reçoit le MP3 de l'agent et l'envoie sur Supabase
 @app.post("/api/upload")
-async def upload_episode(
-        title: str = Form(...),
-        description: str = Form(...),
-        media_file: UploadFile = File(...)
-):
-    # Sauvegarde du fichier MP3 reçu d'Antigravity
-    file_location = f"public/audio/{media_file.filename}"
-    with open(file_location, "wb+") as file_object:
-        file_object.write(media_file.file.read())
+async def upload_episode(file: UploadFile = File(...), api_key: str = Depends(verify_api_key)):
+    if not file.filename.endswith('.mp3'):
+        raise HTTPException(status_code=400, detail="Seuls les fichiers MP3 sont acceptés")
 
-    print(f"Nouvel épisode reçu : {title}")
-    return {"status": "success", "message": "Épisode publié !"}
-
-
-@app.get("/", response_class=HTMLResponse)
-async def read_root():
-    # Affiche la belle interface visuelle
-    with open("index.html", "r", encoding="utf-8") as f:
-        return f.read()
+    try:
+        # On lit la musique envoyée par l'agent
+        file_content = await file.read()
+        
+        # On l'envoie directement dans ton Bucket 'podcasts-audio' sur Supabase
+        supabase.storage.from_("podcasts-audio").upload(
+            file=file_content,
+            path=file.filename,
+            file_options={"content-type": "audio/mpeg", "upsert": "true"}
+        )
+        
+        return {"message": f"Épisode {file.filename} sauvegardé pour l'éternité sur Supabase !"}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Erreur Supabase: {str(e)}")
