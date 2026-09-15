@@ -1,6 +1,7 @@
 import os
 from datetime import datetime
 from fastapi import FastAPI, File, UploadFile, HTTPException, Depends
+from fastapi.responses import FileResponse
 from fastapi.security import APIKeyHeader
 from supabase import create_client, Client
 
