@@ -13,13 +13,38 @@
         }
         body {
             font-family: 'Segoe UI', system-ui, sans-serif;
-            margin: 0; padding: 40px 20px;
+            margin: 0; 
+            padding: 0;
             background-color: var(--bg-dark);
             background-image: radial-gradient(circle at 80% 20%, #164e63 0%, var(--bg-dark) 50%);
             color: var(--text-main);
-            display: flex; justify-content: center; min-height: 100vh;
+            min-height: 100vh;
         }
-        .container { width: 100%; max-width: 700px; }
+        
+        /* --- MENU EN HAUT --- */
+        nav {
+            background: rgba(9, 9, 11, 0.8);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .logo { font-weight: 800; font-size: 1.2rem; color: var(--neon-blue); letter-spacing: 1px; }
+        .nav-links { display: flex; gap: 25px; }
+        .nav-links a {
+            color: var(--text-main);
+            text-decoration: none;
+            font-size: 0.95rem;
+            transition: color 0.2s;
+        }
+        .nav-links a:hover { color: var(--neon-blue); }
+
+        .container { width: 100%; max-width: 700px; margin: 40px auto; padding: 0 20px; box-sizing: border-box;}
         .glass-panel {
             background: var(--glass);
             backdrop-filter: blur(16px);
@@ -38,77 +63,165 @@
             background: var(--neon-blue); color: #000;
             padding: 4px 12px; border-radius: 12px;
             font-weight: 800; font-size: 0.75rem; letter-spacing: 1px;
-            display: inline-block; margin-bottom: 5px;
+            display: inline-block; margin-bottom: 8px;
         }
-        h1 { margin: 10px 0 5px; font-size: 2.2rem; letter-spacing: -1px; }
+        h1 { margin: 0 0 5px; font-size: 2.2rem; letter-spacing: -1px; }
         .subtitle { color: #94a3b8; font-size: 1rem; margin: 0; }
         
-        /* Styles pour les épisodes générés dynamiquement */
-        .player-section {
-            padding-top: 30px;
-            margin-top: 20px;
-            border-top: 1px solid rgba(255,255,255,0.1);
+        .player-section { padding-top: 30px; margin-top: 20px; border-top: 1px solid rgba(255,255,255,0.1); }
+        .player-section h3 { margin: 0 0 5px 0; color: var(--text-main); font-size: 1.2rem; }
+        .description { color: #94a3b8; font-size: 0.9rem; margin-bottom: 20px; }
+        
+        /* --- LECTEUR AUDIO SUR MESURE --- */
+        .custom-player {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            background: rgba(0,0,0,0.4);
+            padding: 10px 15px;
+            border-radius: 50px;
+            border: 1px solid rgba(255,255,255,0.05);
         }
-        .player-section h3 { margin: 0 0 5px 0; color: var(--neon-blue); }
-        .description { color: #cbd5e1; line-height: 1.6; font-size: 0.95rem; margin-bottom: 25px; }
-        audio { width: 100%; border-radius: 12px; outline: none; margin-top: 10px; }
-        .loading { text-align: center; color: #94a3b8; padding: 20px; }
+        .play-btn {
+            width: 45px; height: 45px;
+            border-radius: 50%;
+            background: var(--neon-blue);
+            color: #000;
+            border: none;
+            cursor: pointer;
+            display: flex; justify-content: center; align-items: center;
+            font-size: 1.2rem;
+            padding-left: 4px; /* Centre visuellement le triangle */
+            transition: all 0.2s;
+        }
+        .play-btn:hover { transform: scale(1.05); box-shadow: 0 0 15px rgba(14, 165, 233, 0.4); }
+        .progress-container {
+            flex-grow: 1; height: 6px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 3px; cursor: pointer;
+        }
+        .progress-bar {
+            height: 100%; width: 0%;
+            background: var(--neon-blue);
+            border-radius: 3px;
+            box-shadow: 0 0 10px var(--neon-blue);
+        }
+        .time-display { font-size: 0.85rem; color: #cbd5e1; min-width: 40px; }
     </style>
 </head>
 <body>
-<div class="container">
-    <div class="glass-panel">
-        <div class="header">
-            <div class="cover-art"></div>
-            <div>
-                <span class="badge">NOUVEL ÉPISODE</span>
-                <h1>Cyber & IA Hebdo</h1>
-                <p class="subtitle">L'actualité tech décryptée par Antigravity</p>
+
+    <!-- La barre de navigation -->
+    <nav>
+        <div class="logo">CYBER & IA</div>
+        <div class="nav-links">
+            <a href="#">Accueil</a>
+            <a href="#">Tous les épisodes</a>
+            <a href="#">À propos</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="glass-panel">
+            <div class="header">
+                <div class="cover-art"></div>
+                <div>
+                    <span class="badge">NOUVEL ÉPISODE</span>
+                    <h1>Cyber & IA Hebdo</h1>
+                    <p class="subtitle">L'actualité tech décryptée par Antigravity</p>
+                </div>
+            </div>
+
+            <div id="liste-podcasts">
+                <div style="text-align:center; color:#94a3b8;">Chargement de l'esthétique... ⏳</div>
             </div>
         </div>
-
-        <!-- C'est ici que JavaScript va injecter les épisodes depuis Supabase -->
-        <div id="liste-podcasts">
-            <div class="loading">Chargement de vos épisodes Cloud... ⏳</div>
-        </div>
     </div>
-</div>
 
-<script>
-    async function chargerEpisodes() {
-        try {
-            const reponse = await fetch('/api/episodes');
-            const episodes = await reponse.json();
-            
-            const conteneur = document.getElementById('liste-podcasts');
-            conteneur.innerHTML = ''; 
-            
-            if (episodes.length === 0) {
-                conteneur.innerHTML = '<div class="loading">Aucun épisode publié pour le moment.</div>';
-                return;
+    <script>
+        async function chargerEpisodes() {
+            try {
+                const reponse = await fetch('/api/episodes');
+                const episodes = await reponse.json();
+                const conteneur = document.getElementById('liste-podcasts');
+                conteneur.innerHTML = ''; 
+                
+                if (episodes.length === 0) {
+                    conteneur.innerHTML = '<div style="text-align:center;">Aucun épisode publié.</div>';
+                    return;
+                }
+
+                episodes.forEach((ep, index) => {
+                    const section = document.createElement('div');
+                    section.className = 'player-section';
+                    
+                    // Création de l'interface du lecteur
+                    section.innerHTML = `
+                        <h3>${ep.titre}</h3>
+                        <p class="description">📅 Publié le ${ep.date}</p>
+                        
+                        <div class="custom-player">
+                            <button class="play-btn" id="btn-${index}">▶</button>
+                            <div class="progress-container" id="timeline-${index}">
+                                <div class="progress-bar" id="bar-${index}"></div>
+                            </div>
+                            <span class="time-display" id="time-${index}">0:00</span>
+                            
+                            <!-- L'audio est caché, on le télécommande avec JS -->
+                            <audio id="audio-${index}" src="${ep.url}" type="audio/mpeg" preload="metadata"></audio>
+                        </div>
+                    `;
+                    conteneur.appendChild(section);
+
+                    // Animation et logique du lecteur
+                    const audio = document.getElementById(`audio-${index}`);
+                    const btn = document.getElementById(`btn-${index}`);
+                    const bar = document.getElementById(`bar-${index}`);
+                    const timeline = document.getElementById(`timeline-${index}`);
+                    const timeDisplay = document.getElementById(`time-${index}`);
+
+                    function formatTime(seconds) {
+                        const min = Math.floor(seconds / 60);
+                        const sec = Math.floor(seconds % 60);
+                        return min + ':' + (sec < 10 ? '0' : '') + sec;
+                    }
+
+                    btn.addEventListener('click', () => {
+                        if (audio.paused) {
+                            // Met en pause les autres audios de la page
+                            document.querySelectorAll('audio').forEach(a => a.pause());
+                            document.querySelectorAll('.play-btn').forEach(b => { b.innerHTML = '▶'; b.style.paddingLeft = '4px'; });
+                            
+                            audio.play();
+                            btn.innerHTML = '⏸';
+                            btn.style.paddingLeft = '0px'; // Recentre l'icône pause
+                        } else {
+                            audio.pause();
+                            btn.innerHTML = '▶';
+                            btn.style.paddingLeft = '4px';
+                        }
+                    });
+
+                    audio.addEventListener('timeupdate', () => {
+                        if (audio.duration) {
+                            const percent = (audio.currentTime / audio.duration) * 100;
+                            bar.style.width = percent + '%';
+                            timeDisplay.textContent = formatTime(audio.currentTime);
+                        }
+                    });
+
+                    timeline.addEventListener('click', (e) => {
+                        const rect = timeline.getBoundingClientRect();
+                        const percent = (e.clientX - rect.left) / rect.width;
+                        audio.currentTime = percent * audio.duration;
+                    });
+                });
+            } catch (erreur) {
+                document.getElementById('liste-podcasts').innerHTML = 
+                    '<div style="color: #ef4444;">Erreur serveur.</div>';
             }
-
-            // On crée un lecteur audio pour chaque fichier trouvé sur Supabase
-            episodes.forEach(ep => {
-                const section = document.createElement('div');
-                section.className = 'player-section';
-                section.innerHTML = `
-                    <h3>${ep.titre}</h3>
-                    <p class="description">📅 Publié le ${ep.date}</p>
-                    <audio controls preload="metadata">
-                        <source src="${ep.url}" type="audio/mpeg">
-                        Votre navigateur ne supporte pas la lecture audio.
-                    </audio>
-                `;
-                conteneur.appendChild(section);
-            });
-        } catch (erreur) {
-            document.getElementById('liste-podcasts').innerHTML = 
-                '<div class="loading" style="color: #ef4444;">Erreur de connexion avec le serveur.</div>';
         }
-    }
-    
-    chargerEpisodes();
-</script>
+        chargerEpisodes();
+    </script>
 </body>
 </html>
