@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cyber & IA Hebdo | Podcast</title>
+    <style>
+        :root {
+            --bg-dark: #09090b;
+            --glass: rgba(24, 24, 27, 0.7);
+            --neon-blue: #0ea5e9;
+            --text-main: #f8fafc;
+        }
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            margin: 0; padding: 40px 20px;
+            background-color: var(--bg-dark);
+            background-image: radial-gradient(circle at 80% 20%, #164e63 0%, var(--bg-dark) 50%);
+            color: var(--text-main);
+            display: flex; justify-content: center; min-height: 100vh;
+        }
+        .container { width: 100%; max-width: 700px; }
+        .glass-panel {
+            background: var(--glass);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 24px; padding: 40px;
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);
+        }
+        .header { display: flex; gap: 25px; align-items: center; margin-bottom: 35px; }
+        .cover-art {
+            width: 130px; height: 130px; border-radius: 16px;
+            background: linear-gradient(135deg, #0ea5e9, #3b82f6);
+            box-shadow: 0 10px 30px rgba(14, 165, 233, 0.3);
+        }
+        .badge {
+            background: var(--neon-blue); color: #000;
+            padding: 4px 12px; border-radius: 12px;
+            font-weight: 800; font-size: 0.75rem; letter-spacing: 1px;
+        }
+        h1 { margin: 10px 0 5px; font-size: 2.2rem; letter-spacing: -1px; }
+        .subtitle { color: #94a3b8; font-size: 1rem; margin: 0; }
+        .player-section {
+            padding-top: 30px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+        .player-section h3 { margin: 0 0 10px 0; color: var(--neon-blue); }
+        .description { color: #cbd5e1; line-height: 1.6; font-size: 0.95rem; margin-bottom: 25px; }
+        audio { width: 100%; border-radius: 12px; outline: none; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="glass-panel">
+        <div class="header">
+            <!-- Le carré bleu qui sert de pochette (tu pourras mettre une vraie image plus tard) -->
+            <div class="cover-art"></div>
+            <div class="title-area">
+                <span class="badge">NOUVEL ÉPISODE</span>
+                <h1>Cyber & IA Hebdo</h1>
+                <p class="subtitle">L'actualité tech décryptée par Antigravity</p>
+            </div>
+        </div>
+
+        <div class="player-section">
+            <h3>Épisode 1</h3>
+            <p class="description">Le thermomètre de la sécurité et des modèles d'IA est entré en ébullition cette semaine. Découvrez notre analyse complète.</p>
+
+            <!-- Le fichier audio que l'agent vient d'envoyer -->
+            <audio controls>
+                <source src="/audio/episode_1.mp3" type="audio/mpeg">
+            </audio>
+        </div>
+    </div>
+</div>
+</body>
+</html>
