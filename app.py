@@ -69,3 +69,6 @@ def liste_episodes():
 @app.get("/")
 def afficher_site():
     return FileResponse("index.html")
+@app.get("/logo_podcast.png")
+def afficher_logo():
+    return FileResponse("logo_podcast.png")
