@@ -70,3 +70,6 @@ def liste_episodes():
         
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+@app.get("/")
+def afficher_site():
+    return FileResponse("index.html"
