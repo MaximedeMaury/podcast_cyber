@@ -1,8 +1,8 @@
 import os
 from datetime import datetime
 from fastapi import FastAPI, File, UploadFile, HTTPException, Depends
-from fastapi.responses import FileResponse
 from fastapi.security import APIKeyHeader
+from fastapi.responses import FileResponse
 from supabase import create_client, Client
 
 app = FastAPI()
@@ -42,19 +42,14 @@ async def upload_episode(file: UploadFile = File(...), api_key: str = Depends(ve
 @app.get("/api/episodes")
 def liste_episodes():
     try:
-        # Récupère la liste des fichiers depuis Supabase
         fichiers = supabase.storage.from_("podcasts-audio").list()
         episodes = []
         
         for fichier in fichiers:
             if fichier['name'].endswith('.mp3'):
                 titre = fichier['name'].replace(".mp3", "").replace("_", " ").capitalize()
-                
-                # On gère la date de création de Supabase
                 date_obj = datetime.fromisoformat(fichier['created_at'].replace('Z', '+00:00'))
                 date_fr = date_obj.strftime("%d/%m/%Y à %H:%M")
-                
-                # On demande à Supabase le lien public pour pouvoir écouter la musique
                 url_publique = supabase.storage.from_("podcasts-audio").get_public_url(fichier['name'])
                 
                 episodes.append({
@@ -64,12 +59,13 @@ def liste_episodes():
                     "timestamp": date_obj.timestamp()
                 })
                 
-        # Trie du plus récent au plus ancien
         episodes.sort(key=lambda x: x["timestamp"], reverse=True)
         return episodes
         
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+# 4. Route pour AFFICHER la page d'accueil du site
 @app.get("/")
 def afficher_site():
-    return FileResponse("index.html"
+    return FileResponse("index.html")
