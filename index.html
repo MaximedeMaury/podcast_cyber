@@ -1,246 +1,446 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cyber & IA QUOTIDIEN | Podcast</title>
-    <style>
-        :root {
-            --bg-dark: #09090b;
-            --glass: rgba(24, 24, 27, 0.7);
-            --neon-blue: #0ea5e9;
-            --text-main: #f8fafc;
-        }
-        body {
-            font-family: 'Segoe UI', system-ui, sans-serif;
-            margin: 0; 
-            padding: 0;
-            background-color: var(--bg-dark);
-            background-image: radial-gradient(circle at 80% 20%, #164e63 0%, var(--bg-dark) 50%);
-            color: var(--text-main);
-            min-height: 100vh;
-        }
-        
-        /* --- MENU EN HAUT --- */
-        nav {
-            background: rgba(9, 9, 11, 0.8);
-            backdrop-filter: blur(12px);
-            border-bottom: 1px solid rgba(255,255,255,0.05);
-            padding: 20px 40px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-        .logo { font-weight: 800; font-size: 1.2rem; color: var(--neon-blue); letter-spacing: 1px; }
-        .nav-links { display: flex; gap: 25px; }
-        .nav-links a {
-            color: var(--text-main);
-            text-decoration: none;
-            font-size: 0.95rem;
-            transition: color 0.2s;
-        }
-        .nav-links a:hover { color: var(--neon-blue); }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cyber & IA Hebdo | Podcast</title>
+<meta name="description" content="L'actualité cybersécurité et intelligence artificielle décryptée chaque semaine par Antigravity.">
+<meta name="theme-color" content="#09090b">
 
-        .container { width: 100%; max-width: 700px; margin: 40px auto; padding: 0 20px; box-sizing: border-box;}
-        .glass-panel {
-            background: var(--glass);
-            backdrop-filter: blur(16px);
-            border: 1px solid rgba(255,255,255,0.05);
-            border-radius: 24px; padding: 40px;
-            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);
-        }
-        .header { display: flex; gap: 25px; align-items: center; margin-bottom: 35px; }
-        .cover-art {
-            width: 130px; height: 130px; border-radius: 16px;
-            background: linear-gradient(135deg, #0ea5e9, #3b82f6);
-            box-shadow: 0 10px 30px rgba(14, 165, 233, 0.3);
-            flex-shrink: 0;
-        }
-        .badge {
-            background: var(--neon-blue); color: #000;
-            padding: 4px 12px; border-radius: 12px;
-            font-weight: 800; font-size: 0.75rem; letter-spacing: 1px;
-            display: inline-block; margin-bottom: 8px;
-        }
-        h1 { margin: 0 0 5px; font-size: 2.2rem; letter-spacing: -1px; }
-        .subtitle { color: #94a3b8; font-size: 1rem; margin: 0; }
-        
-        .player-section { padding-top: 30px; margin-top: 20px; border-top: 1px solid rgba(255,255,255,0.1); }
-        .player-section h3 { margin: 0 0 5px 0; color: var(--text-main); font-size: 1.2rem; }
-        .description { color: #94a3b8; font-size: 0.9rem; margin-bottom: 20px; }
-        
-        /* --- LECTEUR AUDIO SUR MESURE --- */
-        .custom-player {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            background: rgba(0,0,0,0.4);
-            padding: 10px 15px;
-            border-radius: 50px;
-            border: 1px solid rgba(255,255,255,0.05);
-        }
-        .play-btn {
-            width: 45px; height: 45px;
-            border-radius: 50%;
-            background: var(--neon-blue);
-            color: #000;
-            border: none;
-            cursor: pointer;
-            display: flex; justify-content: center; align-items: center;
-            font-size: 1.2rem;
-            padding-left: 4px; /* Centre visuellement le triangle */
-            transition: all 0.2s;
-        }
-        .play-btn:hover { transform: scale(1.05); box-shadow: 0 0 15px rgba(14, 165, 233, 0.4); }
-        .progress-container {
-            flex-grow: 1; height: 6px;
-            background: rgba(255,255,255,0.1);
-            border-radius: 3px; cursor: pointer;
-        }
-        .progress-bar {
-            height: 100%; width: 0%;
-            background: var(--neon-blue);
-            border-radius: 3px;
-            box-shadow: 0 0 10px var(--neon-blue);
-        }
-        .logo-container {
-    display: flex;
-    align-items: center;
-    gap: 12px;
+<!-- Open Graph / partage -->
+<meta property="og:title" content="Cyber & IA Hebdo | Podcast">
+<meta property="og:description" content="L'actualité cybersécurité et intelligence artificielle décryptée chaque semaine.">
+<meta property="og:image" content="logo_podcast.png">
+<meta property="og:type" content="website">
+
+<!-- Flux RSS : permet aux apps de podcast (Apple, Spotify...) de suivre le show -->
+<link rel="alternate" type="application/rss+xml" title="Cyber & IA Hebdo" href="/rss.xml">
+<link rel="icon" href="logo_podcast.png" type="image/png">
+
+<style>
+:root {
+  --bg-dark: #09090b;
+  --glass: rgba(24, 24, 27, 0.7);
+  --neon-blue: #0ea5e9;
+  --text-main: #f8fafc;
+  --text-dim: #94a3b8;
+  --danger: #ef4444;
+  --focus: #38bdf8;
 }
-.logo-img {
-    height: 40px; /* Tu peux ajuster la taille ici */
-    width: auto;
-    border-radius: 8px; /* Si tu veux arrondir les bords du logo */
+
+* { box-sizing: border-box; }
+
+body {
+  font-family: 'Segoe UI', system-ui, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: var(--bg-dark);
+  background-image: radial-gradient(circle at 80% 20%, #164e63 0%, var(--bg-dark) 50%);
+  color: var(--text-main);
+  min-height: 100vh;
 }
-.logo-text {
-    font-weight: 800; 
-    font-size: 1.2rem; 
-    color: var(--neon-blue); 
-    letter-spacing: 1px;
+
+a { color: inherit; }
+
+:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+  border-radius: 4px;
 }
-        .time-display { font-size: 0.85rem; color: #cbd5e1; min-width: 40px; }
-    </style>
+
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; animation: none !important; }
+}
+
+/* --- MENU EN HAUT --- */
+nav {
+  background: rgba(9, 9, 11, 0.8);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+  padding: 16px 40px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  justify-content: space-between;
+  align-items: center;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.logo-container { display: flex; align-items: center; gap: 12px; }
+.logo-img { height: 40px; width: auto; border-radius: 8px; }
+.logo-text { font-weight: 800; font-size: 1.2rem; color: var(--neon-blue); letter-spacing: 1px; }
+
+.nav-links { display: flex; gap: 25px; flex-wrap: wrap; }
+.nav-links a {
+  color: var(--text-main);
+  text-decoration: none;
+  font-size: 0.95rem;
+  transition: color 0.2s;
+}
+.nav-links a:hover { color: var(--neon-blue); }
+
+.rss-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--neon-blue) !important;
+  border: 1px solid rgba(14, 165, 233, 0.4);
+  padding: 4px 10px;
+  border-radius: 20px;
+}
+
+.container { width: 100%; max-width: 700px; margin: 40px auto; padding: 0 20px; }
+
+.glass-panel {
+  background: var(--glass);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(255,255,255,0.05);
+  border-radius: 24px;
+  padding: 40px;
+  box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);
+}
+
+.header { display: flex; gap: 25px; align-items: center; margin-bottom: 25px; flex-wrap: wrap; }
+.cover-art {
+  width: 130px; height: 130px; border-radius: 16px;
+  background: linear-gradient(135deg, #0ea5e9, #3b82f6);
+  box-shadow: 0 10px 30px rgba(14, 165, 233, 0.3);
+  flex-shrink: 0;
+  object-fit: cover;
+}
+.badge {
+  background: var(--neon-blue); color: #000;
+  padding: 4px 12px; border-radius: 12px;
+  font-weight: 800; font-size: 0.75rem; letter-spacing: 1px;
+  display: inline-block; margin-bottom: 8px;
+}
+h1 { margin: 0 0 5px; font-size: 2.2rem; letter-spacing: -1px; }
+.subtitle { color: var(--text-dim); font-size: 1rem; margin: 0; }
+
+/* --- Recherche --- */
+.search-wrap { margin-bottom: 10px; }
+.search-input {
+  width: 100%;
+  background: rgba(0,0,0,0.35);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 14px;
+  padding: 12px 16px;
+  color: var(--text-main);
+  font-size: 0.95rem;
+}
+.search-input::placeholder { color: var(--text-dim); }
+
+.player-section { padding-top: 24px; margin-top: 20px; border-top: 1px solid rgba(255,255,255,0.1); }
+.player-section h3 { margin: 0 0 5px 0; color: var(--text-main); font-size: 1.2rem; }
+.description { color: var(--text-dim); font-size: 0.9rem; margin-bottom: 16px; }
+
+/* --- LECTEUR AUDIO --- */
+.custom-player {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  background: rgba(0,0,0,0.4);
+  padding: 10px 15px;
+  border-radius: 24px;
+  border: 1px solid rgba(255,255,255,0.05);
+}
+
+.icon-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-main);
+  cursor: pointer;
+  font-size: 0.9rem;
+  padding: 6px 8px;
+  border-radius: 8px;
+  transition: background 0.15s;
+}
+.icon-btn:hover { background: rgba(255,255,255,0.08); }
+
+.play-btn {
+  width: 45px; height: 45px;
+  border-radius: 50%;
+  background: var(--neon-blue);
+  color: #000;
+  border: none;
+  cursor: pointer;
+  display: flex; justify-content: center; align-items: center;
+  font-size: 1.2rem;
+  padding-left: 4px;
+  transition: all 0.2s;
+  flex-shrink: 0;
+}
+.play-btn:hover { transform: scale(1.05); box-shadow: 0 0 15px rgba(14, 165, 233, 0.4); }
+
+.progress-container {
+  flex-grow: 1; min-width: 80px; height: 6px;
+  background: rgba(255,255,255,0.1);
+  border-radius: 3px; cursor: pointer;
+}
+.progress-bar {
+  height: 100%; width: 0%;
+  background: var(--neon-blue);
+  border-radius: 3px;
+  box-shadow: 0 0 10px var(--neon-blue);
+}
+
+.speed-btn {
+  min-width: 44px;
+  font-weight: 700;
+  font-size: 0.8rem;
+}
+
+.time-display { font-size: 0.85rem; color: #cbd5e1; min-width: 40px; }
+
+.about-section {
+  margin-top: 30px;
+  padding-top: 24px;
+  border-top: 1px solid rgba(255,255,255,0.1);
+  color: var(--text-dim);
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+.about-section h2 { color: var(--text-main); font-size: 1.1rem; margin: 0 0 10px; }
+
+footer {
+  text-align: center;
+  color: var(--text-dim);
+  font-size: 0.85rem;
+  padding: 30px 20px 50px;
+}
+footer a { color: var(--neon-blue); text-decoration: none; }
+
+.error-box {
+  text-align: center;
+  color: var(--danger);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+.retry-btn {
+  background: rgba(239, 68, 68, 0.15);
+  border: 1px solid var(--danger);
+  color: var(--danger);
+  padding: 6px 16px;
+  border-radius: 20px;
+  cursor: pointer;
+}
+
+@media (max-width: 480px) {
+  nav { padding: 14px 20px; }
+  .glass-panel { padding: 24px; }
+  .cover-art { width: 90px; height: 90px; }
+  h1 { font-size: 1.6rem; }
+}
+</style>
 </head>
 <body>
 
-    <!-- La barre de navigation -->
-    <nav>
-        <div class="logo-container">
-    <img src="logo_podcast.png" alt="Logo" class="logo-img">
+<nav>
+  <div class="logo-container">
+    <img src="logo_podcast.png" alt="Logo du podcast Cyber & IA" class="logo-img">
     <span class="logo-text">CYBER & IA</span>
-</div>
-        <div class="nav-links">
-            <a href="#">Accueil</a>
-            <a href="#">Tous les épisodes</a>
-            <a href="#">À propos</a>
-        </div>
-    </nav>
+  </div>
+  <div class="nav-links">
+    <a href="#top">Accueil</a>
+    <a href="#episodes">Tous les épisodes</a>
+    <a href="#apropos">À propos</a>
+    <a href="/rss.xml" class="rss-link" aria-label="S'abonner via le flux RSS">📡 RSS</a>
+  </div>
+</nav>
 
-    <div class="container">
-        <div class="glass-panel">
-            <div class="header">
-                <img src="logo_podcast.png" class="cover-art" alt="Pochette du podcast">
-                <div>
-                    <span class="badge">NOUVEL ÉPISODE</span>
-                    <h1>Cyber & IA Hebdo</h1>
-                    <p class="subtitle">L'actualité tech décryptée par Antigravity</p>
-                </div>
-            </div>
-
-            <div id="liste-podcasts">
-                <div style="text-align:center; color:#94a3b8;">Chargement de l'esthétique... ⏳</div>
-            </div>
-        </div>
+<div class="container" id="top">
+  <div class="glass-panel">
+    <div class="header">
+      <img src="logo_podcast.png" class="cover-art" alt="Pochette du podcast Cyber & IA Hebdo">
+      <div>
+        <span class="badge">NOUVEL ÉPISODE</span>
+        <h1>Cyber & IA Hebdo</h1>
+        <p class="subtitle">L'actualité tech décryptée par Antigravity</p>
+      </div>
     </div>
 
-    <script>
-        async function chargerEpisodes() {
-            try {
-                const reponse = await fetch('/api/episodes');
-                const episodes = await reponse.json();
-                const conteneur = document.getElementById('liste-podcasts');
-                conteneur.innerHTML = ''; 
-                
-                if (episodes.length === 0) {
-                    conteneur.innerHTML = '<div style="text-align:center;">Aucun épisode publié.</div>';
-                    return;
-                }
+    <div class="search-wrap">
+      <input
+        type="search"
+        class="search-input"
+        id="recherche"
+        placeholder="Rechercher un épisode..."
+        aria-label="Rechercher un épisode par titre"
+      >
+    </div>
 
-                episodes.forEach((ep, index) => {
-                    const section = document.createElement('div');
-                    section.className = 'player-section';
-                    
-                    // Création de l'interface du lecteur
-                    section.innerHTML = `
-                        <h3>${ep.titre}</h3>
-                        <p class="description">📅 Publié le ${ep.date}</p>
-                        
-                        <div class="custom-player">
-                            <button class="play-btn" id="btn-${index}">▶</button>
-                            <div class="progress-container" id="timeline-${index}">
-                                <div class="progress-bar" id="bar-${index}"></div>
-                            </div>
-                            <span class="time-display" id="time-${index}">0:00</span>
-                            
-                            <!-- L'audio est caché, on le télécommande avec JS -->
-                            <audio id="audio-${index}" src="${ep.url}" type="audio/mpeg" preload="metadata"></audio>
-                        </div>
-                    `;
-                    conteneur.appendChild(section);
+    <div id="episodes">
+      <div style="text-align:center; color:var(--text-dim);">Chargement des épisodes... ⏳</div>
+    </div>
 
-                    // Animation et logique du lecteur
-                    const audio = document.getElementById(`audio-${index}`);
-                    const btn = document.getElementById(`btn-${index}`);
-                    const bar = document.getElementById(`bar-${index}`);
-                    const timeline = document.getElementById(`timeline-${index}`);
-                    const timeDisplay = document.getElementById(`time-${index}`);
+    <div class="about-section" id="apropos">
+      <h2>À propos</h2>
+      <p>
+        Cyber & IA Hebdo décrypte chaque semaine l'actualité en cybersécurité et en
+        intelligence artificielle : failles marquantes, nouveaux outils, régulation et
+        tendances à suivre. Abonne-toi via le flux RSS pour ne rater aucun épisode.
+      </p>
+    </div>
+  </div>
+</div>
 
-                    function formatTime(seconds) {
-                        const min = Math.floor(seconds / 60);
-                        const sec = Math.floor(seconds % 60);
-                        return min + ':' + (sec < 10 ? '0' : '') + sec;
-                    }
+<footer>
+  Cyber & IA Hebdo — <a href="/rss.xml">S'abonner en RSS</a>
+</footer>
 
-                    btn.addEventListener('click', () => {
-                        if (audio.paused) {
-                            // Met en pause les autres audios de la page
-                            document.querySelectorAll('audio').forEach(a => a.pause());
-                            document.querySelectorAll('.play-btn').forEach(b => { b.innerHTML = '▶'; b.style.paddingLeft = '4px'; });
-                            
-                            audio.play();
-                            btn.innerHTML = '⏸';
-                            btn.style.paddingLeft = '0px'; // Recentre l'icône pause
-                        } else {
-                            audio.pause();
-                            btn.innerHTML = '▶';
-                            btn.style.paddingLeft = '4px';
-                        }
-                    });
+<script>
+let tousLesEpisodes = [];
+const SPEEDS = [1, 1.25, 1.5, 2];
 
-                    audio.addEventListener('timeupdate', () => {
-                        if (audio.duration) {
-                            const percent = (audio.currentTime / audio.duration) * 100;
-                            bar.style.width = percent + '%';
-                            timeDisplay.textContent = formatTime(audio.currentTime);
-                        }
-                    });
+function formatTime(seconds) {
+  if (!isFinite(seconds)) return '0:00';
+  const min = Math.floor(seconds / 60);
+  const sec = Math.floor(seconds % 60);
+  return min + ':' + (sec < 10 ? '0' : '') + sec;
+}
 
-                    timeline.addEventListener('click', (e) => {
-                        const rect = timeline.getBoundingClientRect();
-                        const percent = (e.clientX - rect.left) / rect.width;
-                        audio.currentTime = percent * audio.duration;
-                    });
-                });
-            } catch (erreur) {
-                document.getElementById('liste-podcasts').innerHTML = 
-                    '<div style="color: #ef4444;">Erreur serveur.</div>';
-            }
-        }
-        chargerEpisodes();
-    </script>
+function afficherErreur(conteneur) {
+  conteneur.innerHTML = `
+    <div class="error-box">
+      <span>Impossible de charger les épisodes pour le moment.</span>
+      <button class="retry-btn" id="btn-retry">Réessayer</button>
+    </div>`;
+  document.getElementById('btn-retry').addEventListener('click', chargerEpisodes);
+}
+
+function creerLecteur(ep, index) {
+  const section = document.createElement('div');
+  section.className = 'player-section';
+
+  section.innerHTML = `
+    <h3>${ep.titre}</h3>
+    <p class="description">📅 Publié le ${ep.date}</p>
+    <div class="custom-player">
+      <button class="play-btn" id="btn-${index}" aria-label="Lire l'épisode ${ep.titre}">▶</button>
+      <button class="icon-btn" id="back-${index}" aria-label="Reculer de 15 secondes" title="-15s">⏪ 15</button>
+      <div class="progress-container" id="timeline-${index}" role="slider" aria-label="Progression de la lecture">
+        <div class="progress-bar" id="bar-${index}"></div>
+      </div>
+      <button class="icon-btn" id="fwd-${index}" aria-label="Avancer de 15 secondes" title="+15s">15 ⏩</button>
+      <span class="time-display" id="time-${index}">0:00</span>
+      <button class="icon-btn speed-btn" id="speed-${index}" aria-label="Changer la vitesse de lecture">1x</button>
+      <a class="icon-btn" href="${ep.url}" download aria-label="Télécharger l'épisode">⬇</a>
+      <button class="icon-btn" id="share-${index}" aria-label="Partager l'épisode">🔗</button>
+      <audio id="audio-${index}" src="${ep.url}" preload="metadata"></audio>
+    </div>
+  `;
+
+  const audio = section.querySelector(`#audio-${index}`);
+  const btn = section.querySelector(`#back-${index}`).parentElement.querySelector(`#btn-${index}`);
+  const bar = section.querySelector(`#bar-${index}`);
+  const timeline = section.querySelector(`#timeline-${index}`);
+  const timeDisplay = section.querySelector(`#time-${index}`);
+  const speedBtn = section.querySelector(`#speed-${index}`);
+  const backBtn = section.querySelector(`#back-${index}`);
+  const fwdBtn = section.querySelector(`#fwd-${index}`);
+  const shareBtn = section.querySelector(`#share-${index}`);
+  let speedIndex = 0;
+
+  btn.addEventListener('click', () => {
+    if (audio.paused) {
+      document.querySelectorAll('audio').forEach(a => a.pause());
+      document.querySelectorAll('.play-btn').forEach(b => { b.innerHTML = '▶'; b.style.paddingLeft = '4px'; });
+      audio.play();
+      btn.innerHTML = '⏸';
+      btn.style.paddingLeft = '0px';
+
+      if ('mediaSession' in navigator) {
+        navigator.mediaSession.metadata = new MediaMetadata({
+          title: ep.titre,
+          artist: 'Cyber & IA Hebdo',
+          artwork: [{ src: 'logo_podcast.png', sizes: '512x512', type: 'image/png' }]
+        });
+      }
+    } else {
+      audio.pause();
+      btn.innerHTML = '▶';
+      btn.style.paddingLeft = '4px';
+    }
+  });
+
+  audio.addEventListener('timeupdate', () => {
+    if (audio.duration) {
+      bar.style.width = (audio.currentTime / audio.duration) * 100 + '%';
+      timeDisplay.textContent = formatTime(audio.currentTime);
+    }
+  });
+
+  audio.addEventListener('ended', () => {
+    btn.innerHTML = '▶';
+    btn.style.paddingLeft = '4px';
+  });
+
+  timeline.addEventListener('click', (e) => {
+    const rect = timeline.getBoundingClientRect();
+    const percent = (e.clientX - rect.left) / rect.width;
+    if (audio.duration) audio.currentTime = percent * audio.duration;
+  });
+
+  backBtn.addEventListener('click', () => { audio.currentTime = Math.max(0, audio.currentTime - 15); });
+  fwdBtn.addEventListener('click', () => { audio.currentTime = Math.min(audio.duration || 0, audio.currentTime + 15); });
+
+  speedBtn.addEventListener('click', () => {
+    speedIndex = (speedIndex + 1) % SPEEDS.length;
+    audio.playbackRate = SPEEDS[speedIndex];
+    speedBtn.textContent = SPEEDS[speedIndex] + 'x';
+  });
+
+  shareBtn.addEventListener('click', async () => {
+    if (navigator.share) {
+      try { await navigator.share({ title: ep.titre, url: ep.url }); } catch (e) { /* annulé par l'utilisateur */ }
+    } else {
+      await navigator.clipboard.writeText(ep.url);
+      shareBtn.textContent = '✅';
+      setTimeout(() => { shareBtn.textContent = '🔗'; }, 1500);
+    }
+  });
+
+  return section;
+}
+
+function afficherEpisodes(episodes) {
+  const conteneur = document.getElementById('episodes');
+  conteneur.innerHTML = '';
+
+  if (episodes.length === 0) {
+    conteneur.innerHTML = '<div style="text-align:center; color:var(--text-dim);">Aucun épisode trouvé.</div>';
+    return;
+  }
+
+  episodes.forEach((ep, index) => conteneur.appendChild(creerLecteur(ep, index)));
+}
+
+async function chargerEpisodes() {
+  const conteneur = document.getElementById('episodes');
+  try {
+    const reponse = await fetch('/api/episodes');
+    if (!reponse.ok) throw new Error('Réponse serveur invalide');
+    tousLesEpisodes = await reponse.json();
+    afficherEpisodes(tousLesEpisodes);
+  } catch (erreur) {
+    afficherErreur(conteneur);
+  }
+}
+
+document.getElementById('recherche').addEventListener('input', (e) => {
+  const terme = e.target.value.toLowerCase().trim();
+  const filtres = terme
+    ? tousLesEpisodes.filter(ep => ep.titre.toLowerCase().includes(terme))
+    : tousLesEpisodes;
+  afficherEpisodes(filtres);
+});
+
+chargerEpisodes();
+</script>
 </body>
 </html>
