@@ -153,7 +153,7 @@ def rss_feed():
     <itunes:image href="{escape(SITE_URL)}/logo_podcast.png"/>{items}
   </channel>
 </rss>"""
-    return Response(content=xml, media_type="application/rss+xml")
+    return Response(content=xml.encode("utf-8"), media_type="application/rss+xml; charset=utf-8")
 
 
 # --- 4. Santé du service (utile pour le monitoring / uptime checks) ---
